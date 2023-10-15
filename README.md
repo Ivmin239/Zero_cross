@@ -1,14 +1,12 @@
 import numpy as np
-#---крестики-нолики---
 
 #функция отображения доски
 def boardvis(board):
   print("  {}  | {} |  {}  ".format(board[0], board[1], board[2]))
-  print("  --------  ")
+  print("  ------------  ")
   print("  {}  | {} |  {}  ".format(board[3], board[4], board[5]))
-  print("  --------  ")
-  print("  {}  | {} |  {}  ".format(board[6], board[7], board[8]))
-  
+  print("  ------------  ")
+  print("  {}  | {} |  {}  \n".format(board[6], board[7], board[8]))
 
 #функция для выбора кто ходит первым (рандом)
 def order():
@@ -28,7 +26,7 @@ def again():
 
 #функция проверяющая занята клетка или нет
 def checkfree(board, pos):
-  if (board[int(pos)-1] != "X")&(board[int(pos)-1] != "O"):
+  if (board[int(pos)-1] != 'X')&(board[int(pos)-1] != 'O'):
     return True
   else:
     return False
@@ -37,9 +35,14 @@ def checkfree(board, pos):
 #if num in ['1','2','0','4','5','X','7','8','9']:
 #num - подходит - заменить на соотв символ
 def Actplayer(board, player_sym):
-  nump = ''
-  while not (checkfree(board, nump)) or not (nump in "123456789"):
-    nump = input("Выберите номер клетки от 1 до 9 из не занятых")
+  nump = '!'
+  #debug
+  #print('I am here in function actplayer')
+  #print(nump in "123456789")
+  while not (nump in "123456789"):
+    nump = input("Выберите номер клетки от 1 до 9 из не занятых: ")
+    while not (checkfree(board, nump)):
+      nump = input("Клетка занята! \nВыберите номер клетки от 1 до 9 из не занятых: ")
   board[int(nump)-1] = player_sym
   
   
@@ -51,14 +54,38 @@ def result(b):
       return 0
   elif ''.join(b).isalpha():
     return 2
+  else:
+    return -1
 #функция хода компьютера (1 версия - просто рандомный ход на пустое поле)
 def Actcomp(board, comp_sym):
-  numc = np.random.randint(0, 8, dtype=int)
+  numc = np.random.randint(1, 9, dtype=int)
+  #debug
+  #print("ход компьютера: ", numc, ' is free?: ', checkfree(board, numc))
+  while not (checkfree(board, numc)):
+    numc = np.random.randint(1, 9, dtype=int)
+    #print("ход компьютера: ", numc, ' is free?: ', checkfree(board, numc))
+  print("Ход компьютера: ", numc)
+  board[numc-1] = comp_sym
+
+'''
+def Actcomp(board, comp_sym):
+  if ((b[0] == "X")&(b[1] == "X")):
+    if (board[2] != "X" &  board[2] != "O ")
+    board[2] = comp_sym
+  if ((b[0] == "X")&(b[1] == "X")):
+    board[2] = comp_sym
   while not (checkfree(board, numc)):
     numc = np.random.randint(0, 8, dtype=int)
   board[numc] = comp_sym
 '''
-
+def resultcheck(board):
+  match result(board):
+    case 1:
+      print("Поздравляем! Вы выиграли!")
+    case 0:
+      print("К сожалению, Вы проиграли!")
+    case 2:
+      print("Ничья! Советуем сыграть снова.")
 #основная программа
 
 print("Сыграть в крестики-нолики?")
@@ -84,7 +111,8 @@ while True:
     else:
       Actcomp(board, comp_sym)
       boardvis(board)
-     
+      #debug
+      #print("\n", result(board), type(result(board)), "\n")
       if result(board) == -1:
         turn = 1
       else:
