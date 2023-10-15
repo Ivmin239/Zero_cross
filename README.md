@@ -7,7 +7,7 @@ def boardvis(board):
   print("  {}  | {} |  {}  ".format(board[3], board[4], board[5]))
   print("  ------------  ")
   print("  {}  | {} |  {}  \n".format(board[6], board[7], board[8]))
-
+  
 #функция для выбора кто ходит первым (рандом)
 def order():
   flag = 1
@@ -56,28 +56,50 @@ def result(b):
     return 2
   else:
     return -1
-#функция хода компьютера (1 версия - просто рандомный ход на пустое поле)
-def Actcomp(board, comp_sym):
-  numc = np.random.randint(1, 9, dtype=int)
-  #debug
-  #print("ход компьютера: ", numc, ' is free?: ', checkfree(board, numc))
-  while not (checkfree(board, numc)):
-    numc = np.random.randint(1, 9, dtype=int)
-    #print("ход компьютера: ", numc, ' is free?: ', checkfree(board, numc))
-  print("Ход компьютера: ", numc)
-  board[numc-1] = comp_sym
 
-'''
-def Actcomp(board, comp_sym):
-  if ((b[0] == "X")&(b[1] == "X")):
-    if (board[2] != "X" &  board[2] != "O ")
-    board[2] = comp_sym
-  if ((b[0] == "X")&(b[1] == "X")):
-    board[2] = comp_sym
-  while not (checkfree(board, numc)):
-    numc = np.random.randint(0, 8, dtype=int)
-  board[numc] = comp_sym
-'''
+
+#Функция с более продуманным ходом компьютера
+def Actcomp_upgr(board, comp_sym):
+  if comp_sym == "X":
+    player_sym = "O"
+  else:
+    player_sym = "X"
+  
+  for i in range(1,10):
+    b_copy = board.copy()
+    if checkfree(board, i):
+      b_copy[i-1] = comp_sym
+      if result(b_copy) == 0: #computer
+        print("Ход компьютера: ", i, ' comp win')
+        board[i-1] = comp_sym
+        return
+
+  for i in range(1,10):
+    b_copy = board.copy()
+    if checkfree(board, i):
+      b_copy[i-1] = player_sym
+      if result(b_copy) == 1: #player
+        print("Ход компьютера: ", i, ' block player')
+        board[i-1] = comp_sym
+        return    
+
+  if (checkfree(board, 5 )):
+    print("Ход компьютера: ", 5, ' centrer')
+    board[4] = comp_sym
+    return
+  for i in [1, 3, 7, 9]: 
+    if (checkfree(board, i)):
+      print("Ход компьютера: ", i, ' in corner')
+      board[i-1] = comp_sym
+      return
+  for i in [2, 4, 6, 8]: 
+    if (checkfree(board, i)):
+      print("Ход компьютера: ", i, ' in side')
+      board[i-1] = comp_sym
+      return
+  
+
+
 def resultcheck(board):
   match result(board):
     case 1:
@@ -109,7 +131,7 @@ while True:
         resultcheck(board)
         break
     else:
-      Actcomp(board, comp_sym)
+      Actcomp_upgr(board, comp_sym)
       boardvis(board)
       #debug
       #print("\n", result(board), type(result(board)), "\n")
