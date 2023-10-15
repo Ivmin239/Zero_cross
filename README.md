@@ -1,4 +1,5 @@
 import numpy as np
+#---крестики-нолики---
 
 #функция отображения доски
 def boardvis(board):
@@ -7,14 +8,27 @@ def boardvis(board):
   print("  {}  | {} |  {}  ".format(board[3], board[4], board[5]))
   print("  ------------  ")
   print("  {}  | {} |  {}  \n".format(board[6], board[7], board[8]))
-  
-#функция для выбора кто ходит первым (рандом)
+
+
+#функция для выбора кто ходит первым 
 def order():
   flag = 1
-  pos = np.random.randint(1, 10, dtype=int)
-  if (pos%2==1):
-    flag = 0
-  return 'X', 'O', flag
+  while True:
+    sym = int(input(Выберите свой символ: 1 - "X", 2 - "O"))
+    if (sym == 1) or (sym ==2):
+       break
+  if (sym == 1):
+    pos = np.random.randint(1, 10, dtype=int)
+    if (pos%2==1):
+      flag = 0
+    return 'X', 'O', flag
+  elif(order == 2):
+    pos = np.random.randint(1, 10, dtype=int)
+    if (pos%2==1):
+      flag = 0
+    return 'O', 'X', flag
+
+
 #функция для предложения сыграть еще
 def again():
   while True:
@@ -30,7 +44,7 @@ def checkfree(board, pos):
     return True
   else:
     return False
-  
+
 #функция, в которой игрок делает ход
 #if num in ['1','2','0','4','5','X','7','8','9']:
 #num - подходит - заменить на соотв символ
@@ -44,27 +58,36 @@ def Actplayer(board, player_sym):
     while not (checkfree(board, nump)):
       nump = input("Клетка занята! \nВыберите номер клетки от 1 до 9 из не занятых: ")
   board[int(nump)-1] = player_sym
-  
-  
+
+
 #функция проверяющая выграл ли игрок, компьютер или ничья (поле заполнено)
 def result(b):
-  if ((b[0] == "X")&(b[1] == "X")&(b[2] == "X")) or                       ((b[3] == "X")&(b[4] == "X")&(b[5] == "X")) or                       ((b[6] == "X")&(b[7] == "X")&(b[8] == "X")) or                       ((b[0] == "X")&(b[3] == "X")&(b[6] == "X")) or                       ((b[1] == "X")&(b[4] == "X")&(b[7] == "X")) or                       ((b[2] == "X")&(b[5] == "X")&(b[8] == "X")) or                       ((b[0] == "X")&(b[4] == "X")&(b[8] == "X")) or                       ((b[2] == "X")&(b[4] == "X")&(b[6] == "X")):
+  if ((b[0] == "player_sym")&(b[1] == "player_sym")&(b[2] == "player_sym")) or                       ((b[3] == "player_sym")&(b[4] == "player_sym")&(b[5] == "player_sym")) or                       ((b[6] == "player_sym")&(b[7] == "player_sym")&(b[8] == "player_sym")) or                       ((b[0] == "player_sym")&(b[3] == "player_sym")&(b[6] == "player_sym")) or                       ((b[1] == "player_sym")&(b[4] == "player_sym")&(b[7] == "player_sym")) or                       ((b[2] == "player_sym")&(b[5] == "player_sym")&(b[8] == "player_sym")) or                       ((b[0] == "player_sym")&(b[4] == "player_sym")&(b[8] == "player_sym")) or                       ((b[2] == "player_sym")&(b[4] == "player_sym")&(b[6] == "player_sym")):
     return 1
-  elif ((b[0] == "O")&(b[1] == "O")&(b[2] == "O")) or                       ((b[3] == "O")&(b[4] == "O")&(b[5] == "O")) or                       ((b[6] == "O")&(b[7] == "O")&(b[8] == "O")) or                       ((b[0] == "O")&(b[3] == "O")&(b[6] == "O")) or                       ((b[1] == "O")&(b[4] == "O")&(b[7] == "O")) or                       ((b[2] == "O")&(b[5] == "O")&(b[8] == "O")) or                       ((b[0] == "O")&(b[4] == "O")&(b[8] == "O")) or                       ((b[2] == "O")&(b[4] == "O")&(b[6] == "O")):
+  elif ((b[0] == "comp_sym")&(b[1] == "comp_sym")&(b[2] == "comp_sym")) or                       ((b[3] == "comp_sym")&(b[4] == "comp_sym")&(b[5] == "comp_sym")) or                       ((b[6] == "comp_sym")&(b[7] == "comp_sym")&(b[8] == "comp_sym")) or                       ((b[0] == "comp_sym")&(b[3] == "comp_sym")&(b[6] == "comp_sym")) or                       ((b[1] == "comp_sym")&(b[4] == "comp_sym")&(b[7] == "comp_sym")) or                       ((b[2] == "comp_sym")&(b[5] == "comp_sym")&(b[8] == "comp_sym")) or                       ((b[0] == "comp_sym")&(b[4] == "comp_sym")&(b[8] == "comp_sym")) or                       ((b[2] == "comp_sym")&(b[4] == "comp_sym")&(b[6] == "comp_sym")):
       return 0
   elif ''.join(b).isalpha():
     return 2
   else:
     return -1
+#функция хода компьютера (1 версия - просто рандомный ход на пустое поле)
+def Actcomp(board, comp_sym):
+  numc = np.random.randint(1, 9, dtype=int)
+  #debug
+  #print("ход компьютера: ", numc, ' is free?: ', checkfree(board, numc))
+  while not (checkfree(board, numc)):
+    numc = np.random.randint(1, 9, dtype=int)
+    #print("ход компьютера: ", numc, ' is free?: ', checkfree(board, numc))
+  print("Ход компьютера: ", numc)
+  board[numc-1] = comp_sym
 
 
-#Функция с более продуманным ходом компьютера
 def Actcomp_upgr(board, comp_sym):
   if comp_sym == "X":
     player_sym = "O"
   else:
     player_sym = "X"
-  
+
   for i in range(1,10):
     b_copy = board.copy()
     if checkfree(board, i):
@@ -97,7 +120,7 @@ def Actcomp_upgr(board, comp_sym):
       print("Ход компьютера: ", i, ' in side')
       board[i-1] = comp_sym
       return
-  
+
 
 
 def resultcheck(board):
@@ -115,6 +138,7 @@ while True:
   #задать начальные параметры символов игры
   board = ['1','2','3','4','5','6','7','8','9']
   player_sym, comp_sym, turn = order()
+
   print("Символ игрока - ", player_sym)
   if (turn == 1):
     print("Первым ходитите Вы")  
